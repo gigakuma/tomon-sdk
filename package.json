@@ -35,5 +35,15 @@
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@types/pako": "^1.0.1",
+    "@types/url-join": "^4.0.0",
+    "@types/ws": "^7.2.6",
+    "axios": "^0.19.2",
+    "events": "^3.2.0",
+    "pako": "^1.0.11",
+    "url-join": "^4.0.1",
+    "ws": "^7.3.1"
   }
 }

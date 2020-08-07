@@ -1,1 +1,3 @@
-export const Greeter = (name: string) => `Hello ${name}`;
+import Client from './client';
+
+export default Client;
