@@ -42,4 +42,14 @@ export default class Client extends Observable {
     this.session.open();
     return info;
   }
+
+  async startWithPassword(params: { phone: string; password: string }) {
+    const info = await this.api.route('/auth/login').post({
+      data: params,
+      auth: false,
+    });
+    this.session.token = info.token;
+    this.session.open();
+    return info;
+  }
 }
