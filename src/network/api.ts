@@ -50,7 +50,7 @@ class Route {
     if (options?.auth !== false) {
       const auth = this.auth;
       if (auth) {
-        headers['Authorization'] = auth;
+        headers.Authorization = auth;
       }
     }
     let body;

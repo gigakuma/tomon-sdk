@@ -106,10 +106,11 @@ export default class WS {
     this._reconnecting = true;
     this._reconnectTimer = setTimeout(() => {
       this._retryCount += 1;
-      console.log(`[ws] reconnect ${this._retryCount} times`);
       if (this.online) {
         this._connect(url);
-        this.onReconnect && this.onReconnect({ count: this._retryCount });
+        if (this.onReconnect) {
+          this.onReconnect({ count: this._retryCount });
+        }
       }
     }, WS.retryDelay(this._retryCount));
   }
@@ -126,15 +127,15 @@ export default class WS {
   }
 
   _onOpen(event: WebSocket.OpenEvent) {
-    console.log(`[ws] open`);
     this._retryCount = 0;
     this._reconnecting = false;
     this._stopReconnect();
-    this.onOpen && this.onOpen();
+    if (this.onOpen) {
+      this.onOpen();
+    }
   }
 
   _onClose(event: WebSocket.CloseEvent) {
-    console.log(`[ws] close`);
     let reason: string = '';
     if (event.reason) {
       try {
@@ -152,15 +153,20 @@ export default class WS {
       default:
         break;
     }
-    this.onClose && this.onClose({ code: event.code, reason });
+    if (this.onClose) {
+      this.onClose({ code: event.code, reason });
+    }
   }
 
   _onMessage(event: WebSocket.MessageEvent) {
-    this.onMessage && this.onMessage({ data: event.data });
+    if (this.onMessage) {
+      this.onMessage({ data: event.data });
+    }
   }
 
   _onError(event: WebSocket.ErrorEvent) {
-    console.log(`[ws] error`);
-    this.onError && this.onError({ error: event.error, message: event.message });
+    if (this.onError) {
+      this.onError({ error: event.error, message: event.message });
+    }
   }
 }

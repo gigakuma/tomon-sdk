@@ -123,7 +123,7 @@ export default class Session {
     try {
       packet = this.unpack(raw);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
     this.handlePacket(packet);
   }
