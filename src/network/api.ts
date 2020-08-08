@@ -1,4 +1,6 @@
 import axios from 'axios';
+import FormData from 'form-data';
+import fs from 'fs';
 import urljoin from 'url-join';
 import Config from './config';
 
@@ -10,10 +12,11 @@ export interface RequestOptions {
   data?: any;
   files?: File[];
   auth?: boolean;
-  userAgent?: string;
   headers?: { [key: string]: any };
   timeout?: number;
 }
+
+fs.createReadStream;
 
 class Route {
   path: string;
@@ -62,6 +65,10 @@ class Route {
       if (typeof options.data !== 'undefined') {
         body.append('payload_json', JSON.stringify(options.data));
       }
+      headers = {
+        ...headers,
+        ...body.getHeaders(),
+      };
     } else if (options?.data) {
       body = JSON.stringify(options.data);
       headers['Content-Type'] = 'application/json';

@@ -1,6 +1,6 @@
-import Client from '../src/index';
-const client = new Client();
-client.start('');
-client.on('DISPATCH', (data) => {
+import Bot from '../src/index';
+const bot = new Bot();
+bot.start('');
+bot.on('DISPATCH', (data) => {
   console.log(data);
 });

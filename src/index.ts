@@ -1,3 +1,3 @@
-import Client from './client';
+import Bot from './bot';
 
-export default Client;
+export default Bot;

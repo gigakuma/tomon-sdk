@@ -3,7 +3,7 @@ import Api from './network/api';
 import Session from './network/session';
 import Observable from './utils/observable';
 
-export default class Client extends Observable {
+export default class Bot extends Observable {
   private _api: Api = new Api();
   private _session: Session = new Session({ zlib: true }, this);
 
