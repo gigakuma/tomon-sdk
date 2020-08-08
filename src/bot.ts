@@ -43,7 +43,7 @@ export default class Bot extends Observable {
     return info;
   }
 
-  async startWithPassword(params: { phone: string; password: string }) {
+  async startWithPassword(params: { full_name: string; password: string }) {
     const info = await this.api.route('/auth/login').post({
       data: params,
       auth: false,
