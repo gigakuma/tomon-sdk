@@ -16,7 +16,7 @@ export default class Bot extends Observable {
   }
 
   emit(event: Events, ...args: any[]) {
-    super.emit(event, args);
+    super.emit(event, ...args);
   }
 
   on(event: Events, listener: (...args: any[]) => void) {
@@ -38,6 +38,7 @@ export default class Bot extends Observable {
       },
       auth: false,
     });
+    this.api.token = info.token;
     this.session.token = info.token;
     this.session.open();
     return info;
@@ -48,6 +49,7 @@ export default class Bot extends Observable {
       data: params,
       auth: false,
     });
+    this.api.token = info.token;
     this.session.token = info.token;
     this.session.open();
     return info;

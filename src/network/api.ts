@@ -1,6 +1,7 @@
 import axios from 'axios';
 import FormData from 'form-data';
 import fs from 'fs';
+import path from 'path';
 import urljoin from 'url-join';
 import Config from './config';
 
@@ -10,13 +11,11 @@ const DEFAULT_TIMEOUT = 30000;
 export interface RequestOptions {
   query?: { [key: string]: any };
   data?: any;
-  files?: File[];
+  files?: string[];
   auth?: boolean;
   headers?: { [key: string]: any };
   timeout?: number;
 }
-
-fs.createReadStream;
 
 class Route {
   path: string;
@@ -60,7 +59,8 @@ class Route {
     if (options?.files) {
       body = new FormData();
       for (const file of options.files) {
-        body.append(file.name, file);
+        const filename = path.basename(file);
+        body.append(filename, fs.createReadStream(file), { filename });
       }
       if (typeof options.data !== 'undefined') {
         body.append('payload_json', JSON.stringify(options.data));
