@@ -11,7 +11,13 @@ const DEFAULT_TIMEOUT = 30000;
 export interface RequestOptions {
   query?: { [key: string]: any };
   data?: any;
+  /**
+   * 文件路径，上传文件，会自动改为multipart
+   */
   files?: string[];
+  /**
+   * 是否携带鉴权token，默认true
+   */
   auth?: boolean;
   headers?: { [key: string]: any };
   timeout?: number;

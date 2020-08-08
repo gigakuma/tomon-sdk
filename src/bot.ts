@@ -6,6 +6,10 @@ import Observable from './utils/observable';
 export default class Bot extends Observable {
   private _api: Api = new Api();
   private _session: Session = new Session({ zlib: true }, this);
+  private _id?: string;
+  private _name?: string;
+  private _username?: string;
+  private _discriminator?: string;
 
   get api() {
     return this._api;
@@ -13,6 +17,22 @@ export default class Bot extends Observable {
 
   get session() {
     return this._session;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  get username() {
+    return this._username;
+  }
+
+  get discriminator() {
+    return this._discriminator;
   }
 
   emit(event: Events, ...args: any[]) {
@@ -31,27 +51,40 @@ export default class Bot extends Observable {
     super.off(event, listener);
   }
 
-  async start(token: string) {
-    const info = await this.api.route('/auth/login').post({
-      data: {
-        token,
-      },
-      auth: false,
-    });
-    this.api.token = info.token;
-    this.session.token = info.token;
+  private async _start(params: { token?: string; full_name?: string; password?: string }) {
+    const data =
+      typeof params.token !== 'undefined'
+        ? { token: params.token }
+        : { full_name: params.full_name, password: params.password };
+    console.log(`⏳ Start authenticating...`);
+    try {
+      const info = await this.api.route('/auth/login').post({
+        data,
+        auth: false,
+      });
+      this._id = info.id;
+      this._name = info.name;
+      this._username = info.username;
+      this._discriminator = info.discriminator;
+      console.log(`🎫 Bot ${info.name}(${info.username}#${info.discriminator}) is authenticated.`);
+      this.api.token = info.token;
+      this.session.token = info.token;
+    } catch (e) {
+      console.log(`❌ Authentication failed. Please check your identity.`);
+      return;
+    }
     this.session.open();
-    return info;
+    console.log(`🚢 Connecting...`);
+    this.once('READY', () => {
+      console.log(`🤖️ Bot ${this.name}(${this.username}#${this.discriminator}) is ready to work!`);
+    });
   }
 
-  async startWithPassword(params: { full_name: string; password: string }) {
-    const info = await this.api.route('/auth/login').post({
-      data: params,
-      auth: false,
-    });
-    this.api.token = info.token;
-    this.session.token = info.token;
-    this.session.open();
-    return info;
+  async start(token: string) {
+    return this._start({ token });
+  }
+
+  async startWithPassword(full_name: string, password: string) {
+    return this._start({ full_name, password });
   }
 }
