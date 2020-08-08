@@ -84,7 +84,7 @@ export default class Bot extends Observable {
     return this._start({ token });
   }
 
-  async startWithPassword(full_name: string, password: string) {
-    return this._start({ full_name, password });
+  async startWithPassword(fullname: string, password: string) {
+    return this._start({ full_name: fullname, password });
   }
 }
