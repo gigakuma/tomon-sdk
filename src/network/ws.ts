@@ -59,10 +59,6 @@ export default class WS {
     return this._ws?.url;
   }
 
-  get online() {
-    return navigator.onLine;
-  }
-
   get reconnecting() {
     return this._reconnecting;
   }
@@ -106,11 +102,9 @@ export default class WS {
     this._reconnecting = true;
     this._reconnectTimer = setTimeout(() => {
       this._retryCount += 1;
-      if (this.online) {
-        this._connect(url);
-        if (this.onReconnect) {
-          this.onReconnect({ count: this._retryCount });
-        }
+      this._connect(url);
+      if (this.onReconnect) {
+        this.onReconnect({ count: this._retryCount });
       }
     }, WS.retryDelay(this._retryCount));
   }

@@ -34,15 +34,18 @@ export default class Session {
     this._emitter = emitter;
 
     this._ws.onOpen = () => {
+      console.log('🟢 [ws] open');
       this.handleOpen();
     };
     this._ws.onClose = (event) => {
+      console.log('🔴 [ws] close');
       this.handleClose(event.code, event.reason);
     };
     this._ws.onMessage = (event) => {
       this.handleMessage(event);
     };
     this._ws.onReconnect = (event) => {
+      console.log('🟡 [ws] reconnecting');
       this._emitter?.emit('NETWORK_RECONNECTING', event);
     };
   }
