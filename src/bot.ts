@@ -3,13 +3,26 @@ import Api from './network/api';
 import Session from './network/session';
 import Observable from './utils/observable';
 
+interface BotOptions {
+  api?: string;
+  ws?: string;
+}
+
 export default class Bot extends Observable {
-  private _api: Api = new Api();
-  private _session: Session = new Session({ zlib: true }, this);
+  private _api: Api;
+  private _session: Session;
   private _id?: string;
   private _name?: string;
   private _username?: string;
   private _discriminator?: string;
+  private _options?: BotOptions;
+
+  constructor(options?: BotOptions) {
+    super();
+    this._options = options;
+    this._api = new Api(options?.api);
+    this._session = new Session({ zlib: true, ws: options?.ws }, this);
+  }
 
   get api() {
     return this._api;

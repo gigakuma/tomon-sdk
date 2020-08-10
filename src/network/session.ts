@@ -1,6 +1,6 @@
 import pako from 'pako';
 import Observable from '../utils/observable';
-import Config from './config';
+import config from './config';
 import WS, { WSState } from './ws';
 
 export enum GatewayOp {
@@ -28,9 +28,9 @@ export default class Session {
 
   token: string = '';
 
-  constructor(options?: { zlib?: boolean }, emitter?: Observable) {
+  constructor(options?: { zlib?: boolean; ws?: string }, emitter?: Observable) {
     this._zlib = options?.zlib || false;
-    this._url = `${Config.ws}${this._zlib ? '?compress=zlib-stream' : ''}`;
+    this._url = `${options?.ws || config.ws}${this._zlib ? '?compress=zlib-stream' : ''}`;
     this._emitter = emitter;
 
     this._ws.onOpen = () => {

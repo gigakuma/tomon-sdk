@@ -3,7 +3,6 @@ import FormData from 'form-data';
 import fs from 'fs';
 import ospath from 'path';
 import urljoin from 'url-join';
-import Config from './config';
 
 type RequestMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 const DEFAULT_TIMEOUT = 30000;
@@ -25,11 +24,13 @@ export interface RequestOptions {
 
 export default class Route {
   path: string;
+  api: string;
   token?: string;
 
-  constructor(path: string, token?: string) {
+  constructor(path: string, api: string, token?: string) {
     this.path = path;
     this.token = token;
+    this.api = api;
   }
 
   queryString(options?: RequestOptions): string | undefined {
@@ -42,7 +43,7 @@ export default class Route {
 
   url(options?: RequestOptions): string {
     const query = this.queryString(options);
-    return `${urljoin(Config.apiHost, this.path)}${query ? `?${query}` : ''}`;
+    return `${urljoin(this.api, this.path)}${query ? `?${query}` : ''}`;
   }
 
   get auth(): string | undefined {
