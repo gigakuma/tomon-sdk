@@ -1,4 +1,5 @@
 import pako from 'pako';
+import { TextDecoder } from 'util';
 import Observable from '../utils/observable';
 import config from './config';
 import WS, { WSState } from './ws';
