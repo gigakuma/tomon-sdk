@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import FormData from 'form-data';
 import fs from 'fs';
 import ospath from 'path';
@@ -26,11 +26,13 @@ export default class Route {
   path: string;
   api: string;
   token?: string;
+  partialAxiosConfig?: Partial<AxiosRequestConfig>;
 
-  constructor(path: string, api: string, token?: string) {
+  constructor(path: string, api: string, token?: string, partialAxiosConfig: Partial<AxiosRequestConfig> = {}) {
     this.path = path;
     this.token = token;
     this.api = api;
+    this.partialAxiosConfig = partialAxiosConfig;
   }
 
   queryString(options?: RequestOptions): string | undefined {
@@ -81,6 +83,7 @@ export default class Route {
       headers['Content-Type'] = 'application/json';
     }
     const response = await axios({
+      ...this.partialAxiosConfig,
       method,
       url,
       headers,

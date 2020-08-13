@@ -2,10 +2,14 @@ import Events from './events';
 import Api from './network/api';
 import Session from './network/session';
 import Observable from './utils/observable';
+import { WSOptions } from './network/ws';
+import { AxiosRequestConfig } from 'axios';
 
 interface BotOptions {
   api?: string;
   ws?: string;
+  axiosConfig?: Partial<AxiosRequestConfig>;
+  wsOptions?: WSOptions;
 }
 
 export default class Bot extends Observable {
@@ -20,8 +24,8 @@ export default class Bot extends Observable {
   constructor(options?: BotOptions) {
     super();
     this._options = options;
-    this._api = new Api(options?.api);
-    this._session = new Session({ zlib: true, ws: options?.ws }, this);
+    this._api = new Api(options?.api, options?.axiosConfig);
+    this._session = new Session({ zlib: true, ws: options?.ws, wsOptions: options?.wsOptions }, this);
   }
 
   get api() {
