@@ -83,7 +83,7 @@ export default class Bot extends Observable {
       this.api.token = info.token;
       this.session.token = info.token;
     } catch (e) {
-      console.log(`❌ Authentication failed. Please check your identity.`);
+      console.log(`❌ Authentication failed. Reason: ${e.response?.data?.message}`);
       return;
     }
     this.session.open();
