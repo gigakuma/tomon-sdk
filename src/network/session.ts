@@ -16,9 +16,9 @@ export enum GatewayOp {
 const ab = new TextDecoder('utf-8');
 
 interface SessionOptions {
-   zlib?: boolean;
-   ws?: string;
-   wsOptions?: WSOptions;
+  zlib?: boolean;
+  ws?: string;
+  wsOptions?: WSOptions;
 }
 
 export default class Session {
