@@ -2,7 +2,7 @@ import pako from 'pako';
 import { TextDecoder } from 'util';
 import Observable from '../utils/observable';
 import config from './config';
-import WS, { WSState } from './ws';
+import WS, { WSState, WSOptions } from './ws';
 
 export enum GatewayOp {
   DISPATCH = 0,
@@ -14,6 +14,13 @@ export enum GatewayOp {
 }
 
 const ab = new TextDecoder('utf-8');
+
+interface SessionOptions {
+   zlib?: boolean;
+   ws?: string;
+   wsOptions?: WSOptions;
+}
+
 export default class Session {
   _url: string;
   _zlib: boolean = false;
@@ -21,7 +28,7 @@ export default class Session {
 
   _heartbeatTimer?: NodeJS.Timeout;
   _heartbeatInterval: number = 40000;
-  _ws: WS = new WS();
+  _ws: WS;
   _ready: boolean = false;
   _connected: boolean = false;
   _sessionId?: string;
@@ -29,10 +36,11 @@ export default class Session {
 
   token: string = '';
 
-  constructor(options?: { zlib?: boolean; ws?: string }, emitter?: Observable) {
+  constructor(options?: SessionOptions, emitter?: Observable) {
     this._zlib = options?.zlib || false;
     this._url = `${options?.ws || config.ws}${this._zlib ? '?compress=zlib-stream' : ''}`;
     this._emitter = emitter;
+    this._ws = new WS(options?.wsOptions);
 
     this._ws.onOpen = () => {
       console.log('🟢 [ws] open');

@@ -1,4 +1,5 @@
 import WebSocket from 'ws';
+import http from 'http'
 
 export enum WSState {
   CONNECTING,
@@ -7,6 +8,8 @@ export enum WSState {
   CLOSED,
   RECONNECTING,
 }
+
+export type WSOptions = WebSocket.ClientOptions | http.ClientRequestArgs;
 
 export default class WS {
   static retryDelay(times: number): number {
@@ -24,6 +27,7 @@ export default class WS {
   }
 
   private _ws?: WebSocket;
+  private _wsOptions?: WSOptions;
   private _retryCount = 0;
   private _reconnecting = false;
   private _reconnectTimer?: NodeJS.Timeout;
@@ -33,6 +37,10 @@ export default class WS {
   public onReconnect?: (event: { count: number }) => void;
   public onError?: (event: { error: any; message: string }) => void;
   public onMessage?: (event: { data: any }) => void;
+
+  constructor(_wsOptions?: WSOptions) {
+    this._wsOptions = _wsOptions;
+  }
 
   open(url: string) {
     if (this.state !== WSState.CLOSED) {
@@ -87,7 +95,7 @@ export default class WS {
   }
 
   _connect(url: string) {
-    this._ws = new WebSocket(url);
+    this._ws = new WebSocket(url, this._wsOptions);
     this._ws.binaryType = 'arraybuffer';
     this._ws.onopen = this._onOpen.bind(this);
     this._ws.onclose = this._onClose.bind(this);
