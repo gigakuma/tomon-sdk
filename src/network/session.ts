@@ -47,7 +47,7 @@ export default class Session {
       this.handleOpen();
     };
     this._ws.onClose = (event) => {
-      console.log('🔴 [ws] close');
+      console.log('🔴 [ws] close', `code ${event.code}`);
       this.handleClose(event.code, event.reason);
     };
     this._ws.onMessage = (event) => {

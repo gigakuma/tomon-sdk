@@ -147,13 +147,14 @@ export default class WS {
         reason = event.reason;
       }
     }
-    switch (event.code) {
-      case 1006: {
-        this._reconnect(this.url || '');
-        break;
-      }
-      default:
-        break;
+    let needReconnect = false;
+    if (event.code === 1006) {
+      needReconnect = true;
+    } else if (event.code >= 4000) {
+      needReconnect = true;
+    }
+    if (needReconnect) {
+      this._reconnect(this.url!!);
     }
     if (this.onClose) {
       this.onClose({ code: event.code, reason });
