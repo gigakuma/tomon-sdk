@@ -1,9 +1,10 @@
-import Events from './events';
+import { AxiosRequestConfig } from 'axios';
+
 import Api from './network/api';
 import Session from './network/session';
 import Observable from './utils/observable';
 import { WSOptions } from './network/ws';
-import { AxiosRequestConfig } from 'axios';
+import { WSPayload, WSPayloadType } from './types';
 
 interface BotOptions {
   api?: string;
@@ -52,19 +53,19 @@ export default class Bot extends Observable {
     return this._discriminator;
   }
 
-  emit(event: Events, ...args: any[]) {
-    super.emit(event, ...args);
+  emit<T extends WSPayloadType>(event: T, payload: WSPayload<T>) {
+    super.emit(event, payload);
   }
 
-  on(event: Events, listener: (...args: any[]) => void) {
+  on<T extends WSPayloadType>(event: T, listener: (e: WSPayload<T>) => void) {
     super.on(event, listener);
   }
 
-  once(event: Events, listener: (...args: any[]) => void) {
+  once<T extends WSPayloadType>(event: T, listener: (e: WSPayload<T>) => void) {
     super.once(event, listener);
   }
 
-  off(event: Events, listener: (...args: any[]) => void) {
+  off<T extends WSPayloadType>(event: T, listener: (e: WSPayload<T>) => void) {
     super.off(event, listener);
   }
 
