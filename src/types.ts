@@ -5,37 +5,42 @@ export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends object ? PowerPartial<T[U]> : T[U];
 };
 
-export interface WSPayload<T extends ET> {
-  op: GatewayOp;
-  d: T extends 'MESSAGE_CREATE' | 'MESSAGE_DELETE' | 'MESSAGE_UPDATE'
-    ? Message
-    : T extends 'GUILD_CREATE' | 'GUILD_ROLE_DELETE' | 'GUILD_ROLE_UPDATE'
-    ? Guild
-    : T extends 'CHANNEL_CREATE' | 'CHANNEL_DELETE' | 'CHANNEL_UPDATE'
-    ? Channel
-    : T extends 'EMOJI_CREATE' | 'EMOJI_DELETE' | 'EMOJI_UPDATE'
-    ? Emoji
-    : T extends 'GUILD_MEMBER_ADD' | 'GUILD_MEMBER_REMOVE' | 'GUILD_MEMBER_UPDATE'
-    ? GuildMember
-    : T extends
-        | 'READY'
-        | 'HELLO'
-        | 'DISPATCH'
-        | 'HEARTBEAT'
-        | 'HEARTBEAT_ACK'
-        | 'GUILD_POSITION'
-        | 'CHANNEL_POSITION'
-        | 'GUILD_ROLE_POSITION'
-        | 'MESSAGE_REACTION_ADD'
-        | 'MESSAGE_REACTION_REMOVE'
-        | 'MESSAGE_REACTION_REMOVE_ALL'
-        | 'VOICE_STATE_UPDATE'
-        | 'USER_TYPING'
-        | 'USER_PRESENCE_UPDATE'
-    ? any // TODO
-    : any;
-  e: T;
-}
+export type WSPayloadType = ET;
+export type WSPayload<T extends ET> = T extends 'NETWORK_CONNECTED' | 'NETWORK_DISCONNECTED'
+  ? never
+  : T extends 'NETWORK_RECONNECTING'
+  ? { count: number }
+  : {
+      op: GatewayOp;
+      d: T extends 'MESSAGE_CREATE' | 'MESSAGE_DELETE' | 'MESSAGE_UPDATE'
+        ? Message
+        : T extends 'GUILD_CREATE' | 'GUILD_ROLE_DELETE' | 'GUILD_ROLE_UPDATE'
+        ? Guild
+        : T extends 'CHANNEL_CREATE' | 'CHANNEL_DELETE' | 'CHANNEL_UPDATE'
+        ? Channel
+        : T extends 'EMOJI_CREATE' | 'EMOJI_DELETE' | 'EMOJI_UPDATE'
+        ? Emoji
+        : T extends 'GUILD_MEMBER_ADD' | 'GUILD_MEMBER_REMOVE' | 'GUILD_MEMBER_UPDATE'
+        ? GuildMember
+        : T extends
+            | 'READY'
+            | 'HELLO'
+            | 'DISPATCH'
+            | 'HEARTBEAT'
+            | 'HEARTBEAT_ACK'
+            | 'GUILD_POSITION'
+            | 'CHANNEL_POSITION'
+            | 'GUILD_ROLE_POSITION'
+            | 'MESSAGE_REACTION_ADD'
+            | 'MESSAGE_REACTION_REMOVE'
+            | 'MESSAGE_REACTION_REMOVE_ALL'
+            | 'VOICE_STATE_UPDATE'
+            | 'USER_TYPING'
+            | 'USER_PRESENCE_UPDATE'
+        ? any // TODO: 补充类型
+        : any;
+      e: T;
+    };
 
 export interface Author {
   id: string;
