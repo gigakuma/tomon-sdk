@@ -42,30 +42,21 @@ export type WSPayload<T extends ET> = T extends 'NETWORK_CONNECTED' | 'NETWORK_D
       e: T;
     };
 
-export interface Author {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-  name: string;
-  avatar_url: string;
-  type: number;
-}
-
 export interface Message {
   id: string;
   channel_id: string;
-  author: Author;
+  author: User;
   type: number;
-  content: string;
-  timestamp: Date;
+  content?: string;
+  timestamp: string;
   nonce: string;
-  attachments: string[];
-  reactions: string[];
-  mentions: string[];
-  stamps: string[];
+  attachments: Attachment[];
+  reactions: Reaction[];
+  mentions?: User[];
+  stamps: Stamp[];
   pinned: boolean;
-  edited_timestamp: number;
+  edited_timestamp?: string;
+  reply: Message;
 }
 
 export interface Guild {
@@ -73,16 +64,16 @@ export interface Guild {
   name: string;
   icon: string;
   icon_url: string;
-  background: string;
-  background_url: string;
-  background_props: string;
-  description: string;
+  background?: string;
+  background_url?: string;
+  background_props?: string;
+  description?: string;
   owner_id: string;
   joined_at: string;
   position: number;
   default_message_notifications: number;
   system_channel_flags: number;
-  system_channel_id: string;
+  system_channel_id?: string;
   banned: boolean;
   updated_at: string;
 }
@@ -93,12 +84,19 @@ export interface Channel {
   name: string;
   guild_id: string;
   position: number;
-  permission_overwrites: any[];
+  permission_overwrites: Overwrite[];
   parent_id: string;
   topic: string;
   last_message_id: string;
   last_pin_timestamp: string;
   default_message_notifications: number;
+}
+
+export interface Overwrite {
+  id: string;
+  type: string;
+  allow: number;
+  deny: number;
 }
 
 export interface User {
@@ -108,9 +106,14 @@ export interface User {
   avatar: string;
   name: string;
   avatar_url: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
+  email: string;
+  email_verified: boolean;
+  phone: number;
+  phone_verified: boolean;
   type: number;
+  is_bot: boolean;
 }
 
 export interface Emoji {
@@ -127,9 +130,51 @@ export interface Emoji {
 export interface GuildMember {
   user: User;
   guild_id: string;
-  nick: string;
+  nick: string | null;
   joined_at: string;
   mute: boolean;
   deaf: boolean;
   roles: string[];
+}
+
+export interface Attachment {
+  id: string;
+  filename: string;
+  hash: string;
+  width: number;
+  height: number;
+  size: number;
+  url: string;
+}
+
+export interface Reaction {
+  emoji: PartialEmoji;
+  count: number;
+  me: boolean;
+}
+
+export interface PartialEmoji {
+  id?: string;
+  name?: string;
+}
+
+export interface Stamp {
+  id: string;
+  alias: number;
+  author_id: string;
+  position: number;
+  hash: string;
+  animated: boolean;
+  url: string;
+  width: number;
+  height: number;
+  updated_at: string;
+}
+
+export interface StampPackage {
+  author_id: string;
+  type: number;
+  name: string;
+  stamps: Stamp[];
+  updated_at: string;
 }
